@@ -2,12 +2,21 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Profile Factory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WhatsChat - Direct WhatsApp Chatting App</title>
+    
+    <!-- SEO & Open Graph Social Preview Meta Tags -->
+    <meta name="description" content="अगर आप भी सिंगल हैं और दुनिया भर के अनजान लोगों से बातें करना चाहते हैं तो अभी विजिट करें आपका अपना WhatsChat!">
+    <meta property="og:title" content="WhatsChat - इंडिया का नंबर 1 डायरेक्ट व्हाट्सएप चैट ऐप">
+    <meta property="og:description" content="दुनिया भर के अनजान लोगों से डायरेक्ट चैट करें। 'चैट करना शुरू करें' पर क्लिक करें!">
+    <meta property="og:image" content="https://whatschatwebofficial.github.io/jockeyworldofficial/preview-banner.jpg">
+    <meta property="og:type" content="website">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         body { background-color: #e8ecef; }
         .wa-dark { background-color: #075e54; }
@@ -17,7 +26,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .blur-digits { filter: blur(5px); user-select: none; display: inline-block; letter-spacing: 2px; }
 
-        /* 3D Claymorphism Card Styles based on image */
+        /* 3D Claymorphism Card Styles */
         .clay-card {
             background: #ffffff;
             box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08), 
@@ -32,6 +41,8 @@
                         inset 0 -4px 6px rgba(255, 255, 255, 0.9),
                         0 6px 12px rgba(0, 0, 0, 0.08);
             border: 3.5px solid #d0d7de;
+            object-fit: cover;
+            object-position: center top;
         }
         .clay-whatsapp-btn {
             background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
@@ -46,88 +57,117 @@
                         0 3px 6px rgba(0, 0, 0, 0.04);
             border: 1.5px solid #a7f3d0;
         }
-/* Profile Image Perfect Framing for Face Focus */
-.clay-circle-img {
-    object-fit: cover;
-    object-position: center top; /* Yeh chehre (face) ko upar ki taraf se frame mein focus karega */
-}
+
+        /* Hidden Canvas for Dynamic IG Banner Generation */
+        #shareCanvas { display: none; }
     </style>
 </head>
 <body class="font-sans pb-16 text-gray-800">
 
+    <!-- Canvas Element for dynamic image generation -->
+    <canvas id="shareCanvas" width="800" height="800"></canvas>
+
     <!-- Minimal Header -->
     <header class="wa-dark text-white sticky top-0 z-50 shadow-sm">
         <div class="px-4 py-3 flex justify-between items-center">
-            <h1 id="appTitle" class="text-sm font-bold tracking-wide">WhatsApp Profile Factory</h1>
+            <h1 id="appTitle" class="text-sm font-bold tracking-wide">WhatsChat</h1>
             <div class="flex items-center gap-2">
-                <!-- Language Toggle Button -->
                 <button onclick="toggleLanguage()" id="langBtn" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-[11px] font-bold transition">
                     English
                 </button>
-                <!-- Add / My Profile Button -->
                 <button onclick="openModal()" id="profileBtn" class="text-white px-3 py-1 rounded-lg text-[11px] font-bold shadow-sm transition">
                     Add Profile
                 </button>
             </div>
         </div>
 
-        <!-- Category Filters -->
         <div class="px-4 pb-2.5">
-            <div id="categoryContainer" class="flex gap-1.5 overflow-x-auto no-scrollbar">
-                <!-- Categories rendered dynamically -->
-            </div>
+            <div id="categoryContainer" class="flex gap-1.5 overflow-x-auto no-scrollbar"></div>
         </div>
     </header>
 
-    <!-- User List Container -->
     <main class="max-w-md mx-auto p-3.5 space-y-4">
-        <div id="userList" class="space-y-4">
-            <!-- Cards will load here -->
-        </div>
+        <div id="userList" class="space-y-4"></div>
     </main>
 
-    <!-- Add/Edit Profile Modal -->
+    <!-- Unified Profile Modal -->
     <div id="profileModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-4 shadow-xl relative">
-            <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-sm">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-base">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <h2 id="modalTitle" class="text-xs font-bold text-gray-900 mb-3 uppercase tracking-wider">Nayi Profile Banayein</h2>
-            
-            <form id="profileForm" onsubmit="saveProfile(event)" class="space-y-2.5">
-                <div>
-                    <label id="lblNaam" class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Poora Naam</label>
-                    <input type="text" id="pName" required placeholder="Aman Kumar" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                </div>
-                <div>
-                    <label id="lblNumber" class="block text-[10px] font-bold text-gray-400 uppercase mb-1">WhatsApp Number</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="pCountry" value="+91" maxlength="5" class="w-20 p-2.5 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                        <input type="tel" id="pPhone" required maxlength="10" placeholder="Mobile number" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
+
+            <!-- SECTION 1: My Profile View -->
+            <div id="myProfileView" class="hidden text-center space-y-4 pt-2">
+                <h2 id="lblMyProfTitle" class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">आपकी प्रोफाइल</h2>
+                <div class="flex justify-center">
+                    <div class="w-24 h-24 rounded-full overflow-hidden shadow-md clay-circle-img flex items-center justify-center bg-gray-100 border-2 border-white">
+                        <img id="myViewImg" src="" class="w-full h-full object-cover scale-110" style="object-position: center 20%;">
                     </div>
                 </div>
                 <div>
-                    <label id="lblCat" class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Category</label>
-                    <select id="pCategory" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold">
-                        <option value="Chat Boy">Chat Boy</option>
-                        <option value="Chat Girl">Chat Girl</option>
-                        <option value="Business Boy">Business Boy</option>
-                        <option value="Business Girl">Business Girl</option>
-                    </select>
+                    <h3 id="myViewName" class="text-lg font-bold text-gray-900"></h3>
+                    <p id="myViewPhone" class="text-xs text-gray-500 font-semibold mt-0.5"></p>
+                    <div class="mt-2 inline-block">
+                        <span id="myViewCat" class="clay-badge text-emerald-800 text-xs px-3.5 py-1 rounded-full font-bold shadow-sm"></span>
+                    </div>
                 </div>
-                <div>
-                    <label id="lblPhoto" class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Profile Photo</label>
-                    <input type="file" id="pImage" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+
+                <div class="space-y-2 pt-2">
+                    <button onclick="shareMyProfile()" id="btnShare" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-2 transition active:scale-95">
+                        <i class="fa-solid fa-share-nodes"></i> प्रोफाइल शेयर करें
+                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="switchToEditForm()" id="btnEdit" class="w-1/2 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 rounded-xl text-xs font-bold transition">
+                            एडिट करें
+                        </button>
+                        <button onclick="deleteProfile()" id="btnDelete" class="w-1/2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 py-2.5 rounded-xl text-xs font-bold transition">
+                            प्रोफाइल हटाएं
+                        </button>
+                    </div>
                 </div>
-                <div class="flex gap-2 pt-1">
-                    <button type="submit" id="saveBtn" class="w-full wa-green text-white py-2.5 rounded-xl text-xs font-bold shadow-md">Publish</button>
-                    <button type="button" id="deleteBtn" onclick="deleteProfile()" class="hidden w-1/3 bg-red-50 text-red-600 border border-red-200 py-2.5 rounded-xl text-xs font-bold">Delete</button>
-                </div>
-            </form>
+            </div>
+
+            <!-- SECTION 2: Create / Edit Form -->
+            <div id="profileFormContainer" class="hidden">
+                <h2 id="modalTitle" class="text-xs font-bold text-gray-900 mb-3 uppercase tracking-wider">नयी प्रोफाइल बनायें</h2>
+                
+                <form id="profileForm" onsubmit="saveProfile(event)" class="space-y-2.5">
+                    <div>
+                        <label id="lblNaam" class="block text-[10px] font-bold text-gray-400 uppercase mb-1">पूरा नाम</label>
+                        <input type="text" id="pName" required placeholder="Aman Kumar" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label id="lblNumber" class="block text-[10px] font-bold text-gray-400 uppercase mb-1">व्हाट्सएप नंबर</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="pCountry" value="+91" maxlength="5" class="w-20 p-2.5 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                            <input type="tel" id="pPhone" required maxlength="10" placeholder="Mobile number" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label id="lblCat" class="block text-[10px] font-bold text-gray-400 uppercase mb-1">कैटेगरी</label>
+                        <select id="pCategory" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold">
+                            <option value="Chat Boy">Chat Boy</option>
+                            <option value="Chat Girl">Chat Girl</option>
+                            <option value="Business Boy">Business Boy</option>
+                            <option value="Business Girl">Business Girl</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label id="lblPhoto" class="block text-[10px] font-bold text-gray-400 uppercase mb-1">प्रोफाइल फोटो</label>
+                        <input type="file" id="pImage" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                    </div>
+                    <div class="flex gap-2 pt-1">
+                        <button type="submit" id="saveBtn" class="w-full wa-green text-white py-2.5 rounded-xl text-xs font-bold shadow-md">पब्लिश करें</button>
+                        <button type="button" id="backBtn" onclick="goBackToMyProfile()" class="hidden w-1/3 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-xs font-bold">वापस</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-<<script type="module">
+    <!-- Script Tag -->
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, deleteDoc, setDoc, query, orderBy, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -154,23 +194,31 @@
             hi: {
                 addProf: "प्रोफाइल जोड़े",
                 myProf: "माय प्रोफाइल",
-                title: "WhatsApp Profile Factory",
+                title: "WhatsChat",
                 naam: "पूरा नाम",
                 num: "व्हाट्सएप नंबर",
                 cat: "कैटेगरी",
                 photo: "प्रोफाइल चुनें",
                 pub: "पब्लिश करें",
                 del: "हटाएं",
-                modalNew: "नयी प्रोफाइल बनायेइन",
+                myProfTitle: "आपकी प्रोफाइल",
+                shareBtnText: "प्रोफाइल शेयर करें",
+                editBtnText: "एडिट करें",
+                deleteBtnText: "प्रोफाइल हटाएं",
+                backText: "वापस",
+                modalNew: "नयी प्रोफाइल बनायें",
                 modalEdit: "अपनी प्रोफाइल एडिट करें",
                 noData: "कोई प्रोफाइल नहीं मिली!",
                 alertPhoto: "फोटो जरूरी है!",
                 alertDelete: "क्या आप प्रोफाइल डिलीट करना चाहते हैं?",
                 alertError: "सेव करने में एरर आया",
                 uploading: "अपलोड हो रहा है...",
-                offlineAlert: "कृपया अपना इंटरनेट कनेक्शन जांचें (Check your internet connection)",
+                offlineAlert: "कृपया अपना इंटरनेट कनेक्शन जांचें",
                 loadingText: "डेटा लोड हो रहा है...",
                 loadMore: "और लोड करें (Load More)",
+                shareTagline: "🔥 अगर आप भी सिंगल हैं और दुनिया भर के अनजान लोगों से बातें करना चाहते हैं तो अभी विजिट करें आपका अपना WhatsChat - इंडिया का नंबर 1 डायरेक्ट व्हाट्सएप चैट ऐप!",
+                chatActionBtn: "👉 चैट करना शुरू करें",
+                clipboardCopied: "प्रोफाइल लिंक कॉपी हो गया!",
                 categories: {
                     "All": "सभी (All)",
                     "Chat Boy": "चैट बॉय",
@@ -182,13 +230,18 @@
             en: {
                 addProf: "Add Profile",
                 myProf: "My Profile",
-                title: "WhatsApp Profile Factory",
+                title: "WhatsChat",
                 naam: "Full Name",
                 num: "WhatsApp Number",
                 cat: "Category",
                 photo: "Choose Profile",
                 pub: "Publish",
                 del: "Delete",
+                myProfTitle: "Your Profile",
+                shareBtnText: "Share Profile",
+                editBtnText: "Edit",
+                deleteBtnText: "Delete Profile",
+                backText: "Back",
                 modalNew: "Create New Profile",
                 modalEdit: "Edit Your Profile",
                 noData: "No profiles found!",
@@ -199,6 +252,9 @@
                 offlineAlert: "Please check your internet connection",
                 loadingText: "Loading data...",
                 loadMore: "Load More",
+                shareTagline: "🔥 Single & looking to connect with people worldwide? Visit WhatsChat - India's #1 Direct WhatsApp Chatting App!",
+                chatActionBtn: "👉 Start Chatting Now",
+                clipboardCopied: "Profile link copied to clipboard!",
                 categories: {
                     "All": "All",
                     "Chat Boy": "Chat Boy",
@@ -211,7 +267,19 @@
 
         window.onload = () => {
             applyLanguage();
-            fetchProfiles();
+            fetchProfiles().then(() => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const targetId = urlParams.get('profile');
+                if (targetId) {
+                    setTimeout(() => {
+                        const targetUser = users.find(u => u.profileId === targetId);
+                        if (targetUser && targetUser.phone) {
+                            const cleanNum = targetUser.phone.replace(/[^0-9]/g, '');
+                            window.location.href = `https://wa.me/${cleanNum}`;
+                        }
+                    }, 1200);
+                }
+            });
         };
 
         function showLoader(show, text = "") {
@@ -228,7 +296,6 @@
                 `;
                 document.body.appendChild(loader);
             }
-
             if (show) {
                 const textEl = document.getElementById("loaderText");
                 if (textEl) textEl.innerText = text;
@@ -240,7 +307,6 @@
 
         async function fetchProfiles() {
             const t = translations[lang];
-
             if (!navigator.onLine) {
                 showLoader(true, t.offlineAlert);
                 const myProfileData = localStorage.getItem("my_profile");
@@ -252,16 +318,13 @@
             }
 
             showLoader(true, t.loadingText);
-
             try {
                 const q = query(collection(db, "profiles"), orderBy("timestamp", "desc"), limit(20));
                 const snap = await getDocs(q);
-                
                 let freshUsers = [];
                 snap.forEach(d => freshUsers.push({ id: d.id, ...d.data() }));
                 
                 hasMore = true; 
-                
                 if (snap.docs.length > 0) {
                     lastVisible = snap.docs[snap.docs.length - 1];
                 }
@@ -276,7 +339,6 @@
                 users = freshUsers;
                 render();
             } catch (e) {
-                console.log("Firebase fetch error:", e);
                 const myProfileData = localStorage.getItem("my_profile");
                 if (myProfileData) {
                     users = [JSON.parse(myProfileData)];
@@ -288,93 +350,83 @@
             updateProfileButtonState();
         }
 
+
         window.loadMoreProfiles = async function() {
-    if (!navigator.onLine || !lastVisible) return;
-    const t = translations[lang];
-    
-    showLoader(true, t.loadingText);
+            if (!navigator.onLine || !lastVisible) return;
+            const t = translations[lang];
+            showLoader(true, t.loadingText);
 
-    setTimeout(async () => {
-        try {
-            const q = query(
-                collection(db, "profiles"), 
-                orderBy("timestamp", "desc"), 
-                startAfter(lastVisible), 
-                limit(20)
-            );
-            const snap = await getDocs(q);
-            
-            if (snap.docs.length > 0) {
-                lastVisible = snap.docs[snap.docs.length - 1];
-                let moreUsers = [];
-                snap.forEach(d => moreUsers.push({ id: d.id, ...d.data() }));
-                
-                hasMore = true;
-                users = [...users, ...moreUsers];
-                render();
-                showLoader(false);
+            setTimeout(async () => {
+                try {
+                    const q = query(collection(db, "profiles"), orderBy("timestamp", "desc"), startAfter(lastVisible), limit(20));
+                    const snap = await getDocs(q);
+                    
+                    if (snap.docs.length > 0) {
+                        lastVisible = snap.docs[snap.docs.length - 1];
+                        let moreUsers = [];
+                        snap.forEach(d => moreUsers.push({ id: d.id, ...d.data() }));
+                        
+                        hasMore = true;
+                        users = [...users, ...moreUsers];
+                        render();
+                        showLoader(false);
+                    } else {
+                        showLoader(false);
+                        showToast(t.noData);
+                    }
+                } catch (e) {
+                    showLoader(false);
+                }
+            }, 1000);
+        };
+
+        window.render = function() {
+            const list = document.getElementById("userList");
+            if (!list) return;
+            list.innerHTML = "";
+            let filtered = currentCat === "All" ? users : users.filter(u => u.category === currentCat);
+            const t = translations[lang];
+
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center text-gray-400 text-xs shadow-sm">${t.noData}</div>`;
             } else {
-                showLoader(false);
-                showToast(t.noData);
-            }
-        } catch (e) {
-            console.log("Load more error:", e);
-            showLoader(false);
-        }
-    }, 2000);
-};
-
-window.render = function() {
-    const list = document.getElementById("userList");
-    if (!list) return;
-    list.innerHTML = "";
-    let filtered = currentCat === "All" ? users : users.filter(u => u.category === currentCat);
-    const t = translations[lang];
-
-    if (filtered.length === 0) {
-        list.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center text-gray-400 text-xs shadow-sm">${t.noData}</div>`;
-    } else {
-        filtered.forEach(u => {
-            const maskedDisplay = maskNumber(u.phone);
-            const rawCleanNum = u.phone ? u.phone.replace(/[^0-9]/g, '') : '';
-            const catLabel = t.categories[u.category] || u.category;
-            
-            list.innerHTML += `
-                <div class="clay-card p-4.5 flex items-center justify-between transition hover:scale-[1.01] gap-3 mb-4">
-                    <div class="flex items-center gap-4 min-w-0 flex-1">
-                        <div class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 shadow-md clay-circle-img flex items-center justify-center bg-gray-100 border-2 border-white">
-                            <img src="${u.imageUrl}" 
-                                 class="w-full h-full object-cover scale-110" 
-                                 style="object-position: center 20%;"
-                                 alt="${u.name}">
-                        </div>
-                        <div class="flex flex-col min-w-0">
-                            <h4 class="font-bold text-base text-gray-900 tracking-tight truncate">${u.name}</h4>
-                            <p class="text-xs text-gray-500 font-semibold tracking-wider mt-1">${maskedDisplay}</p>
-                            <div class="mt-2">
-                                <span class="inline-block clay-badge text-emerald-800 text-[11px] px-3 py-0.5 rounded-full font-bold shadow-sm">${catLabel}</span>
+                filtered.forEach(u => {
+                    const maskedDisplay = maskNumber(u.phone);
+                    const rawCleanNum = u.phone ? u.phone.replace(/[^0-9]/g, '') : '';
+                    const catLabel = t.categories[u.category] || u.category;
+                    
+                    list.innerHTML += `
+                        <div class="clay-card p-4.5 flex items-center justify-between transition hover:scale-[1.01] gap-3 mb-4">
+                            <div class="flex items-center gap-4 min-w-0 flex-1">
+                                <div class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 shadow-md clay-circle-img flex items-center justify-center bg-gray-100 border-2 border-white">
+                                    <img src="${u.imageUrl}" class="w-full h-full object-cover scale-110" style="object-position: center 20%;" alt="${u.name}">
+                                </div>
+                                <div class="flex flex-col min-w-0">
+                                    <h4 class="font-bold text-base text-gray-900 tracking-tight truncate">${u.name}</h4>
+                                    <p class="text-xs text-gray-500 font-semibold tracking-wider mt-1">${maskedDisplay}</p>
+                                    <div class="mt-2">
+                                        <span class="inline-block clay-badge text-emerald-800 text-[11px] px-3 py-0.5 rounded-full font-bold shadow-sm">${catLabel}</span>
+                                    </div>
+                                </div>
                             </div>
+                            <a href="https://wa.me/${rawCleanNum}" target="_blank" class="clay-whatsapp-btn text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl transition active:scale-90 flex-shrink-0 my-auto shadow-md">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
                         </div>
-                    </div>
-                    <a href="https://wa.me/${rawCleanNum}" target="_blank" class="clay-whatsapp-btn text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl transition active:scale-90 flex-shrink-0 my-auto shadow-md">
-                        <i class="fa-brands fa-whatsapp"></i>
-                    </a>
-                </div>
-            `;
-        });
-    }
+                    `;
+                });
+            }
 
-    // Load More button sirf tabhi dikhega jab hasMore true ho aur current category "All" ho
-    if (hasMore && currentCat === "All") {
-        list.innerHTML += `
-            <div class="flex justify-center mt-4 mb-2">
-                <button onclick="loadMoreProfiles()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition active:scale-95 flex items-center gap-2">
-                    <i class="fa-solid fa-rotate-right"></i> ${t.loadMore}
-                </button>
-            </div>
-        `;
-    }
-};
+            if (hasMore && currentCat === "All") {
+                list.innerHTML += `
+                    <div class="flex justify-center mt-4 mb-2">
+                        <button onclick="loadMoreProfiles()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition active:scale-95 flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i> ${t.loadMore}
+                        </button>
+                    </div>
+                `;
+            }
+        };
 
         function showToast(message) {
             let toast = document.getElementById("customToast");
@@ -387,7 +439,6 @@ window.render = function() {
             toast.innerText = message;
             toast.style.opacity = "1";
             toast.style.display = "block";
-
             setTimeout(() => {
                 toast.style.opacity = "0";
                 setTimeout(() => { toast.style.display = "none"; }, 300);
@@ -414,31 +465,253 @@ window.render = function() {
             const my = localStorage.getItem("my_profile");
             const t = translations[lang];
             
-            if (my) {
-                const data = JSON.parse(my);
-                document.getElementById("modalTitle").innerText = t.modalEdit;
-                document.getElementById("pName").value = data.name || "";
-                
-                const fullPhone = data.phone || "+91";
-                const phonePart = fullPhone.slice(-10);
-                const countryPart = fullPhone.slice(0, -10);
-                
-                document.getElementById("pCountry").value = countryPart || "+91";
-                document.getElementById("pPhone").value = phonePart;
+            const myView = document.getElementById("myProfileView");
+            const formContainer = document.getElementById("profileFormContainer");
 
-                document.getElementById("pCategory").value = data.category || "Chat Boy";
-                document.getElementById("deleteBtn").classList.remove("hidden");
+            if (my) {
+                myView.classList.remove("hidden");
+                formContainer.classList.add("hidden");
+
+                const data = JSON.parse(my);
+                document.getElementById("myViewImg").src = data.imageUrl;
+                document.getElementById("myViewName").innerText = data.name;
+                document.getElementById("myViewPhone").innerText = data.phone;
+                document.getElementById("myViewCat").innerText = t.categories[data.category] || data.category;
             } else {
+                myView.classList.add("hidden");
+                formContainer.classList.remove("hidden");
+
                 document.getElementById("modalTitle").innerText = t.modalNew;
                 document.getElementById("pName").value = "";
                 document.getElementById("pCountry").value = "+91";
                 document.getElementById("pPhone").value = "";
                 document.getElementById("pCategory").value = "Chat Boy";
-                document.getElementById("deleteBtn").classList.add("hidden");
+                document.getElementById("backBtn").classList.add("hidden");
             }
         }
 
+        window.switchToEditForm = () => {
+            const my = localStorage.getItem("my_profile");
+            const t = translations[lang];
+            const myView = document.getElementById("myProfileView");
+            const formContainer = document.getElementById("profileFormContainer");
+
+            myView.classList.add("hidden");
+            formContainer.classList.remove("hidden");
+            document.getElementById("backBtn").classList.remove("hidden");
+
+            document.getElementById("modalTitle").innerText = t.modalEdit;
+            if (my) {
+                const data = JSON.parse(my);
+                document.getElementById("pName").value = data.name || "";
+                const fullPhone = data.phone || "+91";
+                document.getElementById("pCountry").value = fullPhone.slice(0, -10) || "+91";
+                document.getElementById("pPhone").value = fullPhone.slice(-10);
+                document.getElementById("pCategory").value = data.category || "Chat Boy";
+            }
+        }
+
+        window.goBackToMyProfile = () => {
+            const myView = document.getElementById("myProfileView");
+            const formContainer = document.getElementById("profileFormContainer");
+            myView.classList.remove("hidden");
+            formContainer.classList.add("hidden");
+        }
+
         window.closeModal = () => document.getElementById("profileModal").classList.add("hidden");
+
+        /* ============================================================
+   BULLETPROOF INSTAGRAM-STYLE BANNER CANVAS GENERATOR
+   ============================================================ */
+async function createInstagramStyleBanner(userData) {
+    return new Promise((resolve) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 800;
+        canvas.height = 800;
+        const ctx = canvas.getContext("2d");
+
+        // Background Gradient (Soft Instagram Vibes)
+        const bgGrad = ctx.createLinearGradient(0, 0, 800, 800);
+        bgGrad.addColorStop(0, "#fef3c7");
+        bgGrad.addColorStop(0.5, "#dcfce7");
+        bgGrad.addColorStop(1, "#fde68a");
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, 800, 800);
+
+        // Draw Repeating 'W' Background Pattern
+        ctx.font = "bold 42px sans-serif";
+        ctx.fillStyle = "rgba(16, 185, 129, 0.22)";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        for (let y = 50; y < 800; y += 90) {
+            for (let x = 40; x < 800; x += 110) {
+                const offsetX = (y % 180 === 0) ? 55 : 0;
+                ctx.fillText("W", x + offsetX, y);
+            }
+        }
+
+        // Draw White Central Instagram-style Profile Card Container
+        const cardW = 540, cardH = 640;
+        const cardX = (800 - cardW) / 2;
+        const cardY = (800 - cardH) / 2;
+
+        ctx.shadowColor = "rgba(0, 0, 0, 0.12)";
+        ctx.shadowBlur = 30;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 15;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.roundRect(cardX, cardY, cardW, cardH, 36);
+        ctx.fill();
+
+        // Reset shadow
+        ctx.shadowColor = "transparent";
+
+        const finishDrawing = (imgObj) => {
+            const imgSize = 160;
+            const imgX = (800 - imgSize) / 2;
+            const imgY = cardY + 40;
+
+            // Circular Clip for Profile Image
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(imgX + imgSize / 2, imgY + imgSize / 2, imgSize / 2, 0, Math.PI * 2);
+            ctx.clip();
+            
+            if (imgObj) {
+                try {
+                    ctx.drawImage(imgObj, imgX, imgY, imgSize, imgSize);
+                } catch (e) {
+                    drawDefaultAvatar(ctx, imgX, imgY, imgSize, userData);
+                }
+            } else {
+                drawDefaultAvatar(ctx, imgX, imgY, imgSize, userData);
+            }
+            ctx.restore();
+
+            // Green Border around Profile Picture
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = "#10b981";
+            ctx.beginPath();
+            ctx.arc(imgX + imgSize / 2, imgY + imgSize / 2, imgSize / 2 + 2, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // User Name
+            ctx.fillStyle = "#111827";
+            ctx.font = "bold 28px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(userData.name || "WhatsChat User", 400, imgY + imgSize + 45);
+
+            // Hindi Tagline inside Card
+            ctx.fillStyle = "#4b5563";
+            ctx.font = "16px sans-serif";
+            ctx.fillText("अगर आप भी सिंगल हैं और दुनिया भर के अनजान", 400, imgY + imgSize + 85);
+            ctx.fillText("लोगों से बातें करना चाहते हैं तो अभी विजिट करें", 400, imgY + imgSize + 110);
+            
+            // App Highlights
+            ctx.fillStyle = "#059669";
+            ctx.font = "bold 16px sans-serif";
+            ctx.fillText("WhatsChat - इंडिया का नंबर 1 डायरेक्ट चैट ऐप", 400, imgY + imgSize + 138);
+
+            // Bottom Green Button inside Card (Updated Keyword matching website)
+            const btnW = 420, btnH = 56;
+            const btnX = (800 - btnW) / 2;
+            const btnY = cardY + cardH - 85;
+
+            ctx.fillStyle = "#10b981";
+            ctx.beginPath();
+            ctx.roundRect(btnX, btnY, btnW, btnH, 18);
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 20px sans-serif";
+            ctx.fillText("🌐 Visit WhatsChat Now", 400, btnY + 34);
+
+            // Convert canvas to Blob safely
+            canvas.toBlob((blob) => {
+                resolve(blob || new Blob([""], { type: "image/jpeg" }));
+            }, "image/jpeg", 0.92);
+        };
+
+        // Fallback Avatar if image fails to load due to CORS
+        function drawDefaultAvatar(ctx, x, y, size, data) {
+            ctx.fillStyle = "#e5e7eb";
+            ctx.fillRect(x, y, size, size);
+            ctx.fillStyle = "#374151";
+            ctx.font = "bold 50px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            const initial = data.name ? data.name.charAt(0).toUpperCase() : "W";
+            ctx.fillText(initial, x + size / 2, y + size / 2);
+                        }
+        // Load User Image with CORS check
+        if (userData.imageUrl) {
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = () => finishDrawing(img);
+            img.onerror = () => finishDrawing(null); // Fallback if image blocked
+            img.src = userData.imageUrl;
+        } else {
+            finishDrawing(null);
+        }
+    });
+}
+
+/* ============================================================
+   DIRECT SHARE PORTAL (With New Catchy Profile Share Text)
+   ============================================================ */
+window.shareMyProfile = async () => {
+    const my = localStorage.getItem("my_profile");
+    if (!my) {
+        alert("कृपया पहले अपनी प्रोफाइल बनाएं!"); 
+        return;
+    }
+    const data = JSON.parse(my);
+    
+    const websiteBaseUrl = "https://whatschatwebofficial.github.io/jockeyworldofficial/";
+    const profileLink = `${websiteBaseUrl}?profile=${data.profileId}`;
+    
+    // आपके द्वारा पसंद किया गया नया और आकर्षक शेयरिंग टेक्स्ट
+    const shareText = `🔥 अरे वाह! क्या आप भी अकेले हैं और नए दोस्त बनाना चाहते हैं?\n` +
+                      `अब बोरियत को कहें अलविदा! दुनिया भर के दिलचस्प और अनजान लोगों से डायरेक्ट चैट करें, वो भी बिना किसी झिझक के।\n\n` +
+                      `📲 आज ही जुड़ें इंडिया के नंबर 1 डायरेक्ट व्हाट्सएप चैट प्लेटफॉर्म से - WhatChat!\n` +
+                      `👤 नाम: ${data.name}\n` +
+                      `💬 ऑनलाइन और चैट के लिए तैयार!\n` +
+                      `👉 देर किस बात की? अभी नीचे दिए गए लिंक पर क्लिक करें और सीधे चैट शुरू करें:\n${profileLink}`;
+
+    // 1. केवल सिस्टम का डिफ़ॉल्ट कॉपी तरीका (छोटा 'Copied' अलर्ट)
+    try {
+        const textarea = document.createElement("textarea");
+        textarea.value = shareText;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    } catch (e) {
+        console.error("Copy error:", e);
+    }
+
+    // 2. मोबाइल का नेटिव शेयर मेनू खोलें
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: "WhatsChat Profile",
+                text: shareText,
+                url: profileLink
+            });
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                console.error("Share error:", err);
+            }
+        }
+    }
+};
 
         window.saveProfile = async (e) => {
     e.preventDefault();
@@ -460,7 +733,6 @@ window.render = function() {
         let imageUrl = oldMyProf ? oldMyProf.imageUrl : "";
 
         if (file && navigator.onLine) {
-            // 1. लाखों इमेजेस फिट करने के लिए इमेज को ज्यादा कंप्रेस (छोटा) किया गया है (Size: ~5-10 KB)
             const compressedFile = await new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -471,50 +743,39 @@ window.render = function() {
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        const maxWidth = 150;  // पिक्सेल साइज़ घटाकर छोटा किया गया
-                        const maxHeight = 150;
+                        const maxWidth = 600, maxHeight = 600; // रेजोल्यूशन 300 से बढ़ाकर 600 किया गया
 
                         if (width > height) {
-                            if (width > maxWidth) {
-                                height *= maxWidth / width;
-                                width = maxWidth;
-                            }
+                            if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
                         } else {
-                            if (height > maxHeight) {
-                                width *= maxHeight / height;
-                                height = maxHeight;
-                            }
+                            if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
                         }
 
                         canvas.width = width;
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
+                        
+                        // फोटो को साफ़ और शार्प रखने के लिए हाई क्वालिटी स्मूथिंग इनेबल की गई है
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        
                         ctx.drawImage(img, 0, 0, width, height);
 
                         canvas.toBlob((blob) => {
-                            resolve(new File([blob], file.name, {
-                                type: 'image/jpeg',
-                                lastModified: Date.now()
-                            }));
-                        }, 'image/jpeg', 0.3); // 0.3 क्वालिटी से साइज़ बहुत ज्यादा कम हो जाएगा
+                            resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
+                        }, 'image/jpeg', 0.95); // क्वालिटी 0.85 से बढ़ाकर 0.95 (95%) की गई
                     };
                     img.onerror = (error) => reject(error);
                 };
                 reader.onerror = (error) => reject(error);
             });
 
-            // 2. कंप्रेस की हुई फाइल को क्लाउडिनरी पर अपलोड किया जा रहा है
             const fd = new FormData();
             fd.append("file", compressedFile);
             fd.append("upload_preset", PRESET);
             const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: "POST", body: fd });
             const uploadData = await res.json();
             imageUrl = uploadData.secure_url;
-        } else if (file && !navigator.onLine) {
-            alert("Internet is required to update photo!");
-            btn.innerText = t.pub;
-            btn.disabled = false;
-            return;
         }
 
         const name = document.getElementById("pName").value;
@@ -529,11 +790,7 @@ window.render = function() {
         localStorage.setItem("my_profile", JSON.stringify(profileData));
 
         if (navigator.onLine) {
-            try {
-                await setDoc(doc(db, "profiles", profileId), profileData);
-            } catch (fbErr) {
-                console.log("Firebase sync failed, but local data is saved.");
-            }
+            await setDoc(doc(db, "profiles", profileId), profileData);
         }
 
         closeModal();
@@ -553,11 +810,8 @@ window.render = function() {
                 if (my && navigator.onLine) {
                     try {
                         await deleteDoc(doc(db, "profiles", my.profileId));
-                    } catch (fbErr) {
-                        console.log("Firebase delete error:", fbErr);
-                    }
+                    } catch (fbErr) {}
                 }
-                
                 localStorage.removeItem("my_profile");
                 closeModal();
                 fetchProfiles();
@@ -585,29 +839,39 @@ window.render = function() {
             applyLanguage();
             updateProfileButtonState();
             render();
+            const my = localStorage.getItem("my_profile");
+            if (my && !document.getElementById("profileModal").classList.contains("hidden")) {
+                openModal();
+            }
         }
-function applyLanguage() {
+
+        function applyLanguage() {
             const t = translations[lang];
             const langBtn = document.getElementById("langBtn");
             if (langBtn) langBtn.innerText = lang === "hi" ? "English" : "हिंदी";
             
-            const elNaam = document.getElementById("lblNaam");
-            if (elNaam) elNaam.innerText = t.naam;
-            
-            const elNum = document.getElementById("lblNumber");
-            if (elNum) elNum.innerText = t.num;
-            
-            const elCat = document.getElementById("lblCat");
-            if (elCat) elCat.innerText = t.cat;
-            
-            const elPhoto = document.getElementById("lblPhoto");
-            if (elPhoto) elPhoto.innerText = t.photo;
-            
+            ["lblNaam", "lblNumber", "lblCat", "lblPhoto"].forEach((id, idx) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = [t.naam, t.num, t.cat, t.photo][idx];
+            });
+
             const saveBtn = document.getElementById("saveBtn");
             if (saveBtn) saveBtn.innerText = t.pub;
-            
-            const deleteBtn = document.getElementById("deleteBtn");
-            if (deleteBtn) deleteBtn.innerText = t.del;
+
+            const lblMyProfTitle = document.getElementById("lblMyProfTitle");
+            if (lblMyProfTitle) lblMyProfTitle.innerText = t.myProfTitle;
+
+            const btnShare = document.getElementById("btnShare");
+            if (btnShare) btnShare.innerHTML = `<i class="fa-solid fa-share-nodes"></i> ${t.shareBtnText}`;
+
+            const btnEdit = document.getElementById("btnEdit");
+            if (btnEdit) btnEdit.innerText = t.editBtnText;
+
+            const btnDelete = document.getElementById("btnDelete");
+            if (btnDelete) btnDelete.innerText = t.deleteBtnText;
+
+            const backBtn = document.getElementById("backBtn");
+            if (backBtn) backBtn.innerText = t.backText;
 
             const catContainer = document.getElementById("categoryContainer");
             if (catContainer) {
@@ -616,9 +880,9 @@ function applyLanguage() {
                 cats.forEach(c => {
                     const isActive = currentCat === c;
                     const cls = isActive 
-                        ? "cat-btn bg-white text-emerald-950 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-sm"
-                        : "cat-btn bg-emerald-900/40 text-white px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap";
-                    catContainer.innerHTML += `<button onclick="filterCategory('${c}')" class="${cls}" data-cat="${c}">${t.categories[c]}</button>`;
+                        ? "bg-white text-emerald-950 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-sm"
+                        : "bg-emerald-900/40 text-white px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap";
+                    catContainer.innerHTML += `<button onclick="filterCategory('${c}')" class="${cls}">${t.categories[c]}</button>`;
                 });
             }
         }
