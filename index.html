@@ -748,7 +748,7 @@ async function createInstagramStyleBanner(userData) {
 }
 
 /* ============================================================
-   DIRECT SHARE PORTAL (With New Catchy Profile Share Text)
+   DIRECT SHARE PORTAL (With New Catchy Profile Share Text & Button)
    ============================================================ */
 window.shareMyProfile = async () => {
     const my = localStorage.getItem("my_profile");
@@ -761,13 +761,15 @@ window.shareMyProfile = async () => {
     const websiteBaseUrl = "https://whatschatwebofficial.github.io/jockeyworldofficial/";
     const profileLink = `${websiteBaseUrl}?profile=${data.profileId}`;
     
-    // आपके द्वारा पसंद किया गया नया और आकर्षक शेयरिंग टेक्स्ट
+    // नया और आकर्षक शेयरिंग टेक्स्ट जिसमें 'VISIT NOW' बटन का लुक दिया गया है
     const shareText = `🔥 अरे वाह! क्या आप भी अकेले हैं और नए दोस्त बनाना चाहते हैं?\n` +
                       `अब बोरियत को कहें अलविदा! दुनिया भर के दिलचस्प और अनजान लोगों से डायरेक्ट चैट करें, वो भी बिना किसी झिझक के।\n\n` +
                       `📲 आज ही जुड़ें इंडिया के नंबर 1 डायरेक्ट व्हाट्सएप चैट प्लेटफॉर्म से - WhatChat!\n` +
                       `👤 नाम: ${data.name}\n` +
-                      `💬 ऑनलाइन और चैट के लिए तैयार!\n` +
-                      `👉 देर किस बात की? अभी नीचे दिए गए लिंक पर क्लिक करें और सीधे चैट शुरू करें:\n${profileLink}`;
+                      `💬 ऑनलाइन और चैट के लिए तैयार!\n\n` +
+                      `👇👇👇\n` +
+                      `[ 🔘 VISIT NOW & CHAT ]\n` +
+                      `${profileLink}`;
 
     // 1. केवल सिस्टम का डिफ़ॉल्ट कॉपी तरीका (छोटा 'Copied' अलर्ट)
     try {
@@ -799,8 +801,7 @@ window.shareMyProfile = async () => {
             }
         }
     }
-};
-
+}; 
         window.saveProfile = async (e) => {
     e.preventDefault();
     const fileInput = document.getElementById("pImage");
