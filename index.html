@@ -912,6 +912,25 @@ window.shareMyProfile = async () => {
                 });
             }
         }
+        /* ============================================================
+   AUTOMATIC PROFILE POPUP ON LINK CLICK (Instagram-Style)
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetProfileId = urlParams.get('profile');
+    
+    if (targetProfileId && typeof allUsers !== 'undefined') {
+        // डेटाबेस से उस विशिष्ट यूजर को खोजें
+        const targetUser = allUsers.find(u => u.profileId === targetProfileId);
+        
+        if (targetUser) {
+            // थोड़ा डिले देकर पॉप-अप खोलें ताकि यूजर लिस्ट लोड हो सके
+            setTimeout(() => {
+                openSpecificUserProfile(targetUser);
+            }, 300);
+        }
+    }
+});    
     </script>
 </body>
 </html>
