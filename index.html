@@ -290,8 +290,8 @@
                 }
             }
         };
-
-        window.onload = () => {
+        
+window.onload = () => {
             applyLanguage();
             fetchProfiles().then(() => {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -299,11 +299,11 @@
                 if (targetId) {
                     setTimeout(() => {
                         const targetUser = users.find(u => u.profileId === targetId);
-                        if (targetUser && targetUser.phone) {
-                            const cleanNum = targetUser.phone.replace(/[^0-9]/g, '');
-                            window.location.href = `https://wa.me/${cleanNum}`;
+                        if (targetUser) {
+                            // सीधा व्हाट्सएप भेजने के बजाय इंस्टाग्राम जैसा प्रोफाइल पॉप-अप दिखाएं
+                            openSpecificUserProfile(targetUser);
                         }
-                    }, 1200);
+                    }, 500);
                 }
             });
         };
@@ -912,25 +912,35 @@ window.shareMyProfile = async () => {
                 });
             }
         }
-        /* ============================================================
-   AUTOMATIC PROFILE POPUP ON LINK CLICK (Instagram-Style)
-   ============================================================ */
-window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const targetProfileId = urlParams.get('profile');
-    
-    if (targetProfileId && typeof allUsers !== 'undefined') {
-        // डेटाबेस से उस विशिष्ट यूजर को खोजें
-        const targetUser = allUsers.find(u => u.profileId === targetProfileId);
-        
-        if (targetUser) {
-            // थोड़ा डिले देकर पॉप-अप खोलें ताकि यूजर लिस्ट लोड हो सके
-            setTimeout(() => {
-                openSpecificUserProfile(targetUser);
-            }, 300);
-        }
-    }
-});    
+      // इंस्टाग्राम जैसा प्रोफाइल पॉप-अप दिखाने का सही फंक्शन
+        window.openSpecificUserProfile = function(user) {
+            document.getElementById("profileModal").classList.remove("hidden");
+            const t = translations[lang];
+            
+            const myView = document.getElementById("myProfileView");
+            const formContainer = document.getElementById("profileFormContainer");
+
+            myView.classList.remove("hidden");
+            formContainer.classList.add("hidden");
+
+            // शेयर किए गए यूजर की जानकारी पॉप-अप में सेट करें
+            document.getElementById("myViewImg").src = user.imageUrl;
+            document.getElementById("myViewName").innerText = user.name;
+            document.getElementById("myViewPhone").innerText = user.phone;
+            document.getElementById("myViewCat").innerText = t.categories[user.category] || user.category;
+
+            // 'प्रोफाइल शेयर करें' बटन को उस यूजर के डायरेक्ट व्हाट्सएप चैट बटन में बदल दें
+            const btnShare = document.getElementById("btnShare");
+            const cleanNum = user.phone ? user.phone.replace(/[^0-9]/g, '') : '';
+            btnShare.innerHTML = `<i class="fa-brands fa-whatsapp text-lg"></i> ${user.name} से चैट करें`;
+            btnShare.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-2 transition active:scale-95";
+            btnShare.onclick = () => {
+                window.open(`https://wa.me/${cleanNum}`, '_blank');
+            };
+
+            // एडिट और डिलीट बटन को छुपा दें क्योंकि यह दूसरे की प्रोफाइल है
+            document.getElementById("btnEdit").parentElement.style.display = "none";
+        }      
     </script>
 </body>
 </html>
