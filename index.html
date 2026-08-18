@@ -217,81 +217,87 @@
         let hasMore = true;     
 
         const translations = {
-            hi: {
-                addProf: "प्रोफाइल जोड़े",
-                myProf: "माय प्रोफाइल",
-                title: "WhatsChat",
-                naam: "पूरा नाम",
-                num: "व्हाट्सएप नंबर",
-                cat: "कैटेगरी",
-                photo: "प्रोफाइल चुनें",
-                pub: "पब्लिश करें",
-                del: "हटाएं",
-                myProfTitle: "आपकी प्रोफाइल",
-                shareBtnText: "प्रोफाइल शेयर करें",
-                editBtnText: "एडिट करें",
-                deleteBtnText: "प्रोफाइल हटाएं",
-                backText: "वापस",
-                modalNew: "नयी प्रोफाइल बनायें",
-                modalEdit: "अपनी प्रोफाइल एडिट करें",
-                noData: "कोई प्रोफाइल नहीं मिली!",
-                alertPhoto: "फोटो जरूरी है!",
-                alertDelete: "क्या आप प्रोफाइल डिलीट करना चाहते हैं?",
-                alertError: "सेव करने में एरर आया",
-                uploading: "अपलोड हो रहा है...",
-                offlineAlert: "कृपया अपना इंटरनेट कनेक्शन जांचें",
-                loadingText: "डेटा लोड हो रहा है...",
-                loadMore: "और लोड करें (Load More)",
-                shareTagline: "🔥 अगर आप भी सिंगल हैं और दुनिया भर के अनजान लोगों से बातें करना चाहते हैं तो अभी विजिट करें आपका अपना WhatsChat - इंडिया का नंबर 1 डायरेक्ट व्हाट्सएप चैट ऐप!",
-                chatActionBtn: "👉 चैट करना शुरू करें",
-                clipboardCopied: "प्रोफाइल लिंक कॉपी हो गया!",
-                categories: {
-                    "All": "सभी (All)",
-                    "Chat Boy": "चैट बॉय",
-                    "Chat Girl": "चैट गर्ल",
-                    "Business Boy": "बिजनेस बॉय",
-                    "Business Girl": "बिजनेस गर्ल"
-                }
-            },
-            en: {
-                addProf: "Add Profile",
-                myProf: "My Profile",
-                title: "WhatsChat",
-                naam: "Full Name",
-                num: "WhatsApp Number",
-                cat: "Category",
-                photo: "Choose Profile",
-                pub: "Publish",
-                del: "Delete",
-                myProfTitle: "Your Profile",
-                shareBtnText: "Share Profile",
-                editBtnText: "Edit",
-                deleteBtnText: "Delete Profile",
-                backText: "Back",
-                modalNew: "Create New Profile",
-                modalEdit: "Edit Your Profile",
-                noData: "No profiles found!",
-                alertPhoto: "Photo is required!",
-                alertDelete: "Do you want to delete profile?",
-                alertError: "Error saving profile",
-                uploading: "Uploading...",
-                offlineAlert: "Please check your internet connection",
-                loadingText: "Loading data...",
-                loadMore: "Load More",
-                shareTagline: "🔥 Single & looking to connect with people worldwide? Visit WhatsChat - India's #1 Direct WhatsApp Chatting App!",
-                chatActionBtn: "👉 Start Chatting Now",
-                clipboardCopied: "Profile link copied to clipboard!",
-                categories: {
-                    "All": "All",
-                    "Chat Boy": "Chat Boy",
-                    "Chat Girl": "Chat Girl",
-                    "Business Boy": "Business Boy",
-                    "Business Girl": "Business Girl"
-                }
-            }
-        };
-        
-window.onload = () => {
+    hi: {
+        addProf: "प्रोफाइल जोड़े",
+        myProf: "माय प्रोफाइल",
+        title: "WhatsChat",
+        naam: "पूरा नाम",
+        num: "व्हाट्सएप नंबर",
+        cat: "कैटेगरी",
+        photo: "प्रोफाइल चुनें",
+        pub: "पब्लिश करें",
+        del: "हटाएं",
+        myProfTitle: "आपकी प्रोफाइल",
+        shareBtnText: "प्रोफाइल शेयर करें",
+        editBtnText: "एडिट करें",
+        deleteBtnText: "प्रोफाइल हटाएं",
+        backText: "वापस",
+        modalNew: "नयी प्रोफाइल बनायें",
+        modalEdit: "अपनी प्रोफाइल एडिट करें",
+        noData: "कोई प्रोफाइल नहीं मिली!",
+        alertPhoto: "फोटो जरूरी है!",
+        alertDelete: "क्या आप प्रोफाइल डिलीट करना चाहते हैं?",
+        alertError: "सेव करने में एरर आया",
+        uploading: "अपलोड हो रहा है...",
+        offlineAlert: "कृपया अपना इंटरनेट कनेक्शन जांचें",
+        loadingText: "डेटा लोड हो रहा है...",
+        loadMore: "और लोड करें (Load More)",
+        shareTagline: "🔥 अगर आप भी सिंगल हैं और दुनिया भर के अनजान लोगों से बातें करना चाहते हैं तो अभी विजिट करें आपका अपना WhatsChat - इंडिया का नंबर 1 डायरेक्ट व्हाट्सएप चैट ऐप!",
+        chatActionBtn: "👉 चैट करना शुरू करें",
+        clipboardCopied: "प्रोफाइल लिंक कॉपी हो गया!",
+        profilesUpdated: "प्रोफाइल्स अपडेट हो गई हैं!",
+        noNewProfiles: "कोई नया प्रोफाइल नहीं मिला",
+        internetError: "इंटरनेट कनेक्शन नहीं है!",
+        categories: {
+            "All": "सभी (All)",
+            "Chat Boy": "चैट बॉय",
+            "Chat Girl": "चैट गर्ल",
+            "Business Boy": "बिजनेस बॉय",
+            "Business Girl": "बिजनेस गर्ल"
+        }
+    },
+    en: {
+        addProf: "Add Profile",
+        myProf: "My Profile",
+        title: "WhatsChat",
+        naam: "Full Name",
+        num: "WhatsApp Number",
+        cat: "Category",
+        photo: "Choose Profile",
+        pub: "Publish",
+        del: "Delete",
+        myProfTitle: "Your Profile",
+        shareBtnText: "Share Profile",
+        editBtnText: "Edit",
+        deleteBtnText: "Delete Profile",
+        backText: "Back",
+        modalNew: "Create New Profile",
+        modalEdit: "Edit Your Profile",
+        noData: "No profiles found!",
+        alertPhoto: "Photo is required!",
+        alertDelete: "Do you want to delete profile?",
+        alertError: "Error saving profile",
+        uploading: "Uploading...",
+        offlineAlert: "Please check your internet connection",
+        loadingText: "Loading data...",
+        loadMore: "Load More",
+        shareTagline: "🔥 Single & looking to connect with people worldwide? Visit WhatsChat - India's #1 Direct WhatsApp Chatting App!",
+        chatActionBtn: "👉 Start Chatting Now",
+        clipboardCopied: "Profile link copied to clipboard!",
+        profilesUpdated: "Profiles updated successfully!",
+        noNewProfiles: "No new profiles found",
+        internetError: "No internet connection!",
+        categories: {
+            "All": "All",
+            "Chat Boy": "Chat Boy",
+            "Chat Girl": "Chat Girl",
+            "Business Boy": "Business Boy",
+            "Business Girl": "Business Girl"
+        }
+    }
+};
+
+                window.onload = () => {
             applyLanguage();
             fetchProfiles().then(() => {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -331,7 +337,7 @@ window.onload = () => {
             }
         }
 
-        async function fetchProfiles() {
+                async function fetchProfiles() {
             const t = translations[lang];
             if (!navigator.onLine) {
                 showLoader(true, t.offlineAlert);
@@ -354,13 +360,6 @@ window.onload = () => {
                 if (snap.docs.length > 0) {
                     lastVisible = snap.docs[snap.docs.length - 1];
                 }
-                
-                const myProfileData = localStorage.getItem("my_profile");
-                if (myProfileData) {
-                    const myProfObj = JSON.parse(myProfileData);
-                    freshUsers = freshUsers.filter(u => u.profileId !== myProfObj.profileId);
-                    freshUsers.unshift(myProfObj);
-                }
 
                 users = freshUsers;
                 render();
@@ -376,35 +375,85 @@ window.onload = () => {
             updateProfileButtonState();
         }
 
-
         window.loadMoreProfiles = async function() {
-            if (!navigator.onLine || !lastVisible) return;
-            const t = translations[lang];
-            showLoader(true, t.loadingText);
+    const t = translations[lang];
 
-            setTimeout(async () => {
-                try {
-                    const q = query(collection(db, "profiles"), orderBy("timestamp", "desc"), startAfter(lastVisible), limit(20));
-                    const snap = await getDocs(q);
+    if (!navigator.onLine) {
+        showToast(t.internetError);
+        return;
+    }
+    
+    showLoader(true, t.loadingText);
+
+    // ठीक 2 सेकंड का लोडर डिले
+    setTimeout(async () => {
+        try {
+            // यदि हमारे पास आखिरी पॉइंटर है, तो उसके आगे का डेटा लाएं
+            if (lastVisible) {
+                const q = query(
+                    collection(db, "profiles"), 
+                    orderBy("timestamp", "desc"), 
+                    startAfter(lastVisible), 
+                    limit(20)
+                );
+                const snap = await getDocs(q);
+                
+                if (!snap.empty) {
+                    lastVisible = snap.docs[snap.docs.length - 1];
+                    let moreUsers = [];
+                    snap.forEach(d => moreUsers.push({ id: d.id, ...d.data() }));
                     
-                    if (snap.docs.length > 0) {
-                        lastVisible = snap.docs[snap.docs.length - 1];
-                        let moreUsers = [];
-                        snap.forEach(d => moreUsers.push({ id: d.id, ...d.data() }));
-                        
-                        hasMore = true;
-                        users = [...users, ...moreUsers];
+                    // डुप्लीकेट यूजर्स को रोकने के लिए चेक करके जोड़ें
+                    let existingIds = new Set(users.map(u => u.id));
+                    let uniqueNewUsers = moreUsers.filter(u => !existingIds.has(u.id));
+                    
+                    if (uniqueNewUsers.length > 0) {
+                        // 1. लोड हुई प्रोफाइल को नीचे (मोजूदा लिस्ट के बाद) जोड़ा गया है
+                        users = [...users, ...uniqueNewUsers];
                         render();
-                        showLoader(false);
+                        // 2. प्रोफाइल लोड होने पर भाषा के अनुसार अलर्ट दिखेगा
+                        showToast(t.profilesUpdated);
                     } else {
-                        showLoader(false);
-                        showToast(t.noData);
+                        // 2. प्रोफाइल लोड न होने पर (नया डेटा न मिलने पर) भाषा के अनुसार अलर्ट दिखेगा
+                        showToast(t.noNewProfiles);
                     }
-                } catch (e) {
+                    
                     showLoader(false);
+                    return;
                 }
-            }, 1000);
-        };
+            }
+
+            // अगर ऊपर वाले से डेटा न मिले या lastVisible न हो, तो शुरू से फ्रेश डेटा फेच करें ताकि कोई नया यूजर छूटे नहीं
+            const fallbackQ = query(collection(db, "profiles"), orderBy("timestamp", "desc"), limit(users.length + 20));
+            const fallbackSnap = await getDocs(fallbackQ);
+            
+            let freshList = [];
+            fallbackSnap.forEach(d => freshList.push({ id: d.id, ...d.data() }));
+            
+            let existingIds = new Set(users.map(u => u.id));
+            let uniqueNewUsers = freshList.filter(u => !existingIds.has(u.id));
+
+            if (fallbackSnap.docs.length > 0) {
+                lastVisible = fallbackSnap.docs[fallbackSnap.docs.length - 1];
+            }
+
+            if (uniqueNewUsers.length > 0) {
+                users = [...users, ...uniqueNewUsers];
+                render();
+                showToast(t.profilesUpdated);
+            } else {
+                showToast(t.noNewProfiles);
+            }
+
+        } catch (e) {
+            console.error("Load more error:", e);
+            // यदि फायरबेस इंडेक्स की दिक्कत होगी, तो यह फॉलबैक ट्रिगर हो जाएगा और ऐप क्रैश नहीं होगा
+            showToast(t.loadingText);
+        } finally {
+            showLoader(false);
+        }
+    }, 2000);
+};
 
         window.render = function() {
             const list = document.getElementById("userList");
@@ -470,7 +519,6 @@ window.onload = () => {
                 setTimeout(() => { toast.style.display = "none"; }, 300);
             }, 2000);
         }
-
         function maskNumber(fullNum) {
             if (!fullNum) return "";
             const clean = fullNum.trim();
