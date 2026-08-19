@@ -54,48 +54,123 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .blur-digits { filter: blur(5px); user-select: none; display: inline-block; letter-spacing: 2px; }
 
-        /* 3D Claymorphism Card Styles - ऐप जैसे मोटे और साफ़ कार्ड्स */
+        /* 🌟 3D Claymorphism Split Profile Card Design (केवल यूज़र लिस्ट के लिए) */
         .clay-card {
-            background: #ffffff;
+            background: #0f172a !important; /* दाहिना हिस्सा गहरा काला/नीला */
             box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08), 
-                        0 10px 15px -5px rgba(0, 0, 0, 0.03),
-                        inset 0 2px 4px rgba(255, 255, 255, 1),
-                        inset 0 -5px 8px rgba(0, 0, 0, 0.05);
-            border: 4px solid #e1e6eb;
+                        0 10px 15px -5px rgba(0, 0, 0, 0.03);
+            border: 3px solid #cbd5e1;
             border-radius: 2.2rem;
-            padding: 18px !important;
+            padding: 0 !important; /* पैडिंग शून्य ताकि इमेज कोने तक फिट हो सके */
             margin-bottom: 16px !important;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            max-width: 430px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 125px; /* कार्ड की फिक्स और सुंदर ऊंचाई */
         }
-        .clay-circle-img {
-            width: 70px !important;
-            height: 70px !important;
-            box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2), 
-                        inset 0 -4px 6px rgba(255, 255, 255, 0.9),
-                        0 6px 12px rgba(0, 0, 0, 0.08);
-            border: 3.5px solid #d0d7de;
-            object-fit: cover;
-            object-position: center top;
+
+        /* बाएं हिस्से का सफेद बैकग्राउंड और इमेज परफेक्ट फेस सेंटरिंग के साथ (सिर्फ होमपेज कार्ड्स के लिए) */
+        .clay-card > .clay-circle-img,
+        #userList .clay-circle-img {
+            width: 42% !important;
+            height: 100% !important;
+            min-width: 42% !important;
+            background-color: #ffffff !important;
+            box-shadow: none !important;
+            border: none !important;
+            border-radius: 2.2rem 0 0 2.2rem !important; /* कार्ड के आकार से मेल खाता हुआ कॉर्नर */
+            object-fit: cover !important;
+            object-position: center 25% !important; /* चेहरे को हमेशा बीच में फोकस करने के लिए */
+            transform: scale(1.08); /* हल्का ज़ूम ताकि एक्स्ट्रा हिस्सा छुप जाए और चेहरा साफ़ दिखे */
+            transition: transform 0.3s ease;
         }
+
+        /* कार्ड पर हओवर करने पर हल्का ज़ूम इफ़ेक्ट */
+        .clay-card:hover .clay-circle-img {
+            transform: scale(1.15);
+        }
+
+        /* 🌟 My Profile स्क्रीन या पॉपअप के अंदर की इमेज - अब छोटी और बिल्कुल सेंटर में */
+        #profileModal img, 
+        .profile-modal-content img,
+        div[id*="profile"] img,
+        .fixed img:not(.clay-whatsapp-btn img) {
+            width: 85px !important;
+            height: 85px !important;
+            min-width: unset !important;
+            max-width: unset !important;
+            border-radius: 50% !important; /* एकदम गोल आकार */
+            object-fit: cover !important;
+            object-position: center center !important;
+            transform: none !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+            border: 3px solid #ffffff !important;
+            margin: 0 auto 10px auto !important;
+            display: block !important;
+        }
+
+        /* दाहिने हिस्से का टेक्स्ट लेआउट */
+        .clay-card .text-container, .clay-card > div:nth-child(2) {
+            width: 58% !important;
+            padding: 10px 55px 10px 15px !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* यूजर का नाम - डार्क बैकग्राउंड पर साफ़ सफेद */
+        .clay-card h4 {
+            color: #ffffff !important;
+            font-size: 17px !important;
+            font-weight: 700 !important;
+            margin: 0 0 3px 0 !important;
+        }
+
+        /* मोबाइल नंबर */
+        .clay-card p {
+            color: #94a3b8 !important;
+            font-size: 13px !important;
+            margin: 0 0 6px 0 !important;
+        }
+
+        /* व्हाट्सएप बटन - दाहिने हिस्से में परफेक्ट पोजीशन पर */
         .clay-whatsapp-btn {
-            width: 55px !important;
-            height: 55px !important;
+            position: absolute !important;
+            right: 15px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            width: 45px !important;
+            height: 45px !important;
+            min-width: 45px !important;
             display: flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.4), 
-                        inset 0 -3px 5px rgba(0, 0, 0, 0.2),
-                        0 8px 16px rgba(37, 211, 102, 0.3);
-            border: 3px solid #e1e6eb;
+            box-shadow: 0 6px 14px rgba(37, 211, 102, 0.3);
+            border: 2px solid #0f172a;
             border-radius: 50%;
-            font-size: 24px !important;
+            font-size: 22px !important;
             color: white;
+            z-index: 3;
         }
+
+        /* कैटेगरी बैज स्टाइल */
         .clay-badge {
-            background: linear-gradient(135deg, #f0f9f4 0%, #dcfce7 100%);
-            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 
-                        0 3px 6px rgba(0, 0, 0, 0.04);
-            border: 1.5px solid #a7f3d0;
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #38bdf8 !important;
+            box-shadow: none !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            font-size: 10.5px !important;
+            padding: 2px 8px !important;
+            border-radius: 6px !important;
+            width: fit-content;
         }
 
         /* Hidden Canvas for Dynamic IG Banner Generation */
@@ -470,52 +545,48 @@
 };
 
         window.render = function() {
-            const list = document.getElementById("userList");
-            if (!list) return;
-            list.innerHTML = "";
-            let filtered = currentCat === "All" ? users : users.filter(u => u.category === currentCat);
-            const t = translations[lang];
+    const list = document.getElementById("userList");
+    if (!list) return;
+    list.innerHTML = "";
+    let filtered = currentCat === "All" ? users : users.filter(u => u.category === currentCat);
+    const t = translations[lang];
 
-            if (filtered.length === 0) {
-                list.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center text-gray-400 text-xs shadow-sm">${t.noData}</div>`;
-            } else {
-                filtered.forEach(u => {
-                    const maskedDisplay = maskNumber(u.phone);
-                    const rawCleanNum = u.phone ? u.phone.replace(/[^0-9]/g, '') : '';
-                    const catLabel = t.categories[u.category] || u.category;
-                    
-                    list.innerHTML += `
-                        <div class="clay-card p-4.5 flex items-center justify-between transition hover:scale-[1.01] gap-3 mb-4">
-                            <div class="flex items-center gap-4 min-w-0 flex-1">
-                                <div class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 shadow-md clay-circle-img flex items-center justify-center bg-gray-100 border-2 border-white">
-                                    <img src="${u.imageUrl}" class="w-full h-full object-cover scale-110" style="object-position: center 20%;" alt="${u.name}">
-                                </div>
-                                <div class="flex flex-col min-w-0">
-                                    <h4 class="font-bold text-base text-gray-900 tracking-tight truncate">${u.name}</h4>
-                                    <p class="text-xs text-gray-500 font-semibold tracking-wider mt-1">${maskedDisplay}</p>
-                                    <div class="mt-2">
-                                        <span class="inline-block clay-badge text-emerald-800 text-[11px] px-3 py-0.5 rounded-full font-bold shadow-sm">${catLabel}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="https://wa.me/${rawCleanNum}" target="_blank" class="clay-whatsapp-btn text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl transition active:scale-90 flex-shrink-0 my-auto shadow-md">
-                                <i class="fa-brands fa-whatsapp"></i>
-                            </a>
+    if (filtered.length === 0) {
+        list.innerHTML = `<div class="bg-white p-8 rounded-3xl text-center text-gray-400 text-xs shadow-sm">${t.noData}</div>`;
+    } else {
+        filtered.forEach(u => {
+            const maskedDisplay = maskNumber(u.phone);
+            const rawCleanNum = u.phone ? u.phone.replace(/[^0-9]/g, '') : '';
+            const catLabel = t.categories[u.category] || u.category;
+            
+            list.innerHTML += `
+                <div class="clay-card">
+                    <img src="${u.imageUrl}" class="clay-circle-img" alt="${u.name}" style="object-position: center 25%;">
+                    <div class="text-container">
+                        <h4 class="truncate">${u.name}</h4>
+                        <p>${maskedDisplay}</p>
+                        <div>
+                            <span class="clay-badge">${catLabel}</span>
                         </div>
-                    `;
-                });
-            }
-
-            if (hasMore && currentCat === "All") {
-                list.innerHTML += `
-                    <div class="flex justify-center mt-4 mb-2">
-                        <button onclick="loadMoreProfiles()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition active:scale-95 flex items-center gap-2">
-                            <i class="fa-solid fa-rotate-right"></i> ${t.loadMore}
-                        </button>
                     </div>
-                `;
-            }
-        };
+                    <a href="https://wa.me/${rawCleanNum}" target="_blank" class="clay-whatsapp-btn">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                </div>
+            `;
+        });
+    }
+
+    if (hasMore && currentCat === "All") {
+        list.innerHTML += `
+            <div class="flex justify-center mt-4 mb-2">
+                <button onclick="loadMoreProfiles()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py.5 rounded-xl shadow-md transition active:scale-95 flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> ${t.loadMore}
+                </button>
+            </div>
+        `;
+    }
+};
 
         function showToast(message) {
             let toast = document.getElementById("customToast");
@@ -764,7 +835,7 @@ window.shareMyProfile = async () => {
     // नया और आकर्षक शेयरिंग टेक्स्ट जिसमें 'VISIT NOW' बटन का लुक दिया गया है
     const shareText = `🔥 अरे वाह! क्या आप भी अकेले हैं और नए दोस्त बनाना चाहते हैं?\n` +
                       `अब बोरियत को कहें अलविदा! दुनिया भर के दिलचस्प और अनजान लोगों से डायरेक्ट चैट करें, वो भी बिना किसी झिझक के।\n\n` +
-                      `📲 आज ही जुड़ें इंडिया के नंबर 1 डायरेक्ट व्हाट्सएप चैट प्लेटफॉर्म से - WhatChat!\n` +
+                      `📲 आज ही जुड़ें इंडिया के नंबर 1 डायरेक्ट व्हाट्सएप चैट प्लेटफॉर्म से - WhatsChat!\n` +
                       `👤 नाम: ${data.name}\n` +
                       `💬 ऑनलाइन और चैट के लिए तैयार!\n\n` +
                       `👇👇👇\n` +
