@@ -33,150 +33,144 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* मोबाइल ऐप जैसी परफेक्ट स्टाइलिंग और साइज़िंग */
-        body {
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #e8ecef;
-            font-size: 16px;
-        }
+    /* मोबाइल ऐप जैसी परफेक्ट स्टाइलिंग और साइज़िंग */
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #e8ecef;
+        font-size: 16px;
+    }
 
-        .profile-container, .max-w-md {
-            width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-        }
+    .profile-container, .max-w-md {
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    }
 
-        .wa-dark { background-color: #075e54; }
-        .wa-green { background-color: #25d366; }
-        .wa-blue { background-color: #0077b5; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .blur-digits { filter: blur(5px); user-select: none; display: inline-block; letter-spacing: 2px; }
+    .wa-dark { background-color: #075e54; }
+    .wa-green { background-color: #25d366; }
+    .wa-blue { background-color: #0077b5; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .blur-digits { filter: blur(5px); user-select: none; display: inline-block; letter-spacing: 2px; }
 
-        /* 🌟 3D Claymorphism Split Profile Card Design (केवल यूज़र लिस्ट के लिए) */
-        .clay-card {
-            background: #0f172a !important; /* दाहिना हिस्सा गहरा काला/नीला */
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08), 
-                        0 10px 15px -5px rgba(0, 0, 0, 0.03);
-            border: 3px solid #cbd5e1;
-            border-radius: 2.2rem;
-            padding: 0 !important; /* पैडिंग शून्य ताकि इमेज कोने तक फिट हो सके */
-            margin-bottom: 16px !important;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-            max-width: 430px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 125px; /* कार्ड की फिक्स और सुंदर ऊंचाई */
-        }
+    /* 🌟 3D Claymorphism Split Profile Card Design (बड़ा और साफ़ ज़ूम-इन लुक) */
+    .clay-card {
+        background: #0f172a !important; 
+        box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        border: 2px solid #334155;
+        border-radius: 1.8rem;
+        padding: 0 !important; 
+        margin-bottom: 16px !important;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+        max-width: 430px;
+        margin-left: auto;
+        margin-right: auto;
+        min-height: 135px !important; /* कार्ड की सही ऊंचाई ताकि मैटर बहार न निकले */
+    }
 
-        /* बाएं हिस्से का सफेद बैकग्राउंड और इमेज परफेक्ट फेस सेंटरिंग के साथ (सिर्फ होमपेज कार्ड्स के लिए) */
-        .clay-card > .clay-circle-img,
-        #userList .clay-circle-img {
-            width: 42% !important;
-            height: 100% !important;
-            min-width: 42% !important;
-            background-color: #ffffff !important;
-            box-shadow: none !important;
-            border: none !important;
-            border-radius: 2.2rem 0 0 2.2rem !important; /* कार्ड के आकार से मेल खाता हुआ कॉर्नर */
-            object-fit: cover !important;
-            object-position: center 25% !important; /* चेहरे को हमेशा बीच में फोकस करने के लिए */
-            transform: scale(1.08); /* हल्का ज़ूम ताकि एक्स्ट्रा हिस्सा छुप जाए और चेहरा साफ़ दिखे */
-            transition: transform 0.3s ease;
-        }
+    /* बाएं हिस्से की इमेज */
+    .clay-card > .clay-circle-img,
+    #userList .clay-circle-img {
+        width: 38% !important;
+        height: 135px !important;
+        min-width: 38% !important;
+        background-color: #ffffff !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 1.8rem 0 0 1.8rem !important;
+        object-fit: cover !important;
+        object-position: center 25% !important;
+    }
 
-        /* कार्ड पर हओवर करने पर हल्का ज़ूम इफ़ेक्ट */
-        .clay-card:hover .clay-circle-img {
-            transform: scale(1.15);
-        }
+    /* 🌟 My Profile स्क्रीन या पॉपअप के अंदर की इमेज */
+    #profileModal img, 
+    .profile-modal-content img,
+    div[id*="profile"] img,
+    .fixed img:not(.clay-whatsapp-btn img) {
+        width: 95px !important;
+        height: 95px !important;
+        min-width: unset !important;
+        max-width: unset !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+        object-position: center center !important;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+        border: 3px solid #ffffff !important;
+        margin: 0 auto 10px auto !important;
+        display: block !important;
+    }
 
-        /* 🌟 My Profile स्क्रीन या पॉपअप के अंदर की इमेज - अब छोटी और बिल्कुल सेंटर में */
-        #profileModal img, 
-        .profile-modal-content img,
-        div[id*="profile"] img,
-        .fixed img:not(.clay-whatsapp-btn img) {
-            width: 85px !important;
-            height: 85px !important;
-            min-width: unset !important;
-            max-width: unset !important;
-            border-radius: 50% !important; /* एकदम गोल आकार */
-            object-fit: cover !important;
-            object-position: center center !important;
-            transform: none !important;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
-            border: 3px solid #ffffff !important;
-            margin: 0 auto 10px auto !important;
-            display: block !important;
-        }
+    /* दाहिने हिस्से का टेक्स्ट लेआउट */
+    .clay-card .text-container, .clay-card > div:nth-child(2) {
+        width: 62% !important;
+        padding: 12px 55px 12px 14px !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
 
-        /* दाहिने हिस्से का टेक्स्ट लेआउट */
-        .clay-card .text-container, .clay-card > div:nth-child(2) {
-            width: 58% !important;
-            padding: 10px 55px 10px 15px !important;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            z-index: 2;
-        }
+    /* यूजर का नाम - बड़ा और साफ़ फॉन्ट */
+    .clay-card h4 {
+        color: #ffffff !important;
+        font-size: 18px !important; 
+        font-weight: 700 !important;
+        margin: 0 0 4px 0 !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-        /* यूजर का नाम - डार्क बैकग्राउंड पर साफ़ सफेद */
-        .clay-card h4 {
-            color: #ffffff !important;
-            font-size: 17px !important;
-            font-weight: 700 !important;
-            margin: 0 0 3px 0 !important;
-        }
+    /* मोबाइल नंबर - बड़ा फॉन्ट */
+    .clay-card p {
+        color: #94a3b8 !important;
+        font-size: 14px !important; 
+        margin: 0 0 8px 0 !important;
+    }
 
-        /* मोबाइल नंबर */
-        .clay-card p {
-            color: #94a3b8 !important;
-            font-size: 13px !important;
-            margin: 0 0 6px 0 !important;
-        }
+    /* व्हाट्सएप बटन - परफेक्ट साइज़ */
+    .clay-whatsapp-btn {
+        position: absolute !important;
+        right: 12px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: 48px !important; 
+        height: 48px !important;
+        min-width: 48px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+        box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+        border: 2px solid #0f172a;
+        border-radius: 50%;
+        font-size: 22px !important; 
+        color: white;
+        z-index: 3;
+    }
 
-        /* व्हाट्सएप बटन - दाहिने हिस्से में परफेक्ट पोजीशन पर */
-        .clay-whatsapp-btn {
-            position: absolute !important;
-            right: 15px !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            width: 45px !important;
-            height: 45px !important;
-            min-width: 45px !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            box-shadow: 0 6px 14px rgba(37, 211, 102, 0.3);
-            border: 2px solid #0f172a;
-            border-radius: 50%;
-            font-size: 22px !important;
-            color: white;
-            z-index: 3;
-        }
+    /* कैटेगरी बैज स्टाइल */
+    .clay-badge {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #38bdf8 !important;
+        box-shadow: none !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        font-size: 11px !important; 
+        padding: 3px 8px !important;
+        border-radius: 6px !important;
+        width: fit-content;
+    }
 
-        /* कैटेगरी बैज स्टाइल */
-        .clay-badge {
-            background: rgba(255, 255, 255, 0.1) !important;
-            color: #38bdf8 !important;
-            box-shadow: none !important;
-            border: 1px solid rgba(255, 255, 255, 0.15) !important;
-            font-size: 10.5px !important;
-            padding: 2px 8px !important;
-            border-radius: 6px !important;
-            width: fit-content;
-        }
-
-        /* Hidden Canvas for Dynamic IG Banner Generation */
-        #shareCanvas { display: none; }
-    </style>
+    #shareCanvas { display: none; }
+        </style>
+    
 </head>
 <body class="font-sans pb-16 text-gray-800">
 
