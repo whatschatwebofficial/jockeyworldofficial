@@ -276,6 +276,28 @@
         </div>
     </div>
 
+    <!-- सही Cropper.js CSS और JS CDN लिंक्स -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<!-- 2. फुल-स्क्रीन क्रॉपिंग पॉपअप (Modal) -->
+<div id="cropperModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:99999; padding:15px; box-sizing:border-box;">
+    <div style="max-width:450px; margin:20px auto; background:#1e293b; padding:15px; border-radius:12px; color:#fff; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+        <h3 style="margin-top:0; text-align:center; font-family:sans-serif;">Adjust Profile Picture</h3>
+        
+        <!-- इमेज दिखाने का एरिया -->
+        <div style="height:350px; background:#0f172a; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+            <img id="imageToCrop" style="max-width:100%; max-height:100%; display:block;">
+        </div>
+        
+        <!-- बटन कंट्रोल्स (सही ID के साथ) -->
+        <div style="display:flex; justify-content:space-between; margin-top:20px;">
+            <button id="cropCancelBtn" style="flex:1; padding:12px; background:#475569; color:#fff; border:none; border-radius:6px; margin-right:10px; font-weight:bold; cursor:pointer;">Cancel</button>
+            <button id="cropSaveBtn" style="flex:1; padding:12px; background:#075e54; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Set Photo</button>
+        </div>
+    </div>
+</div>
+    
     <!-- Script Tag -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -861,7 +883,8 @@ window.shareMyProfile = async () => {
     const t = translations[lang];
     const oldMyProf = JSON.parse(localStorage.getItem("my_profile"));
 
-    if (!file && !oldMyProf) {
+    // यहाँ हम चेक करेंगे कि न तो कोई नई कटी हुई फोटो है और न ही पुरानी प्रोफाइल है
+    if (!croppedBlobData && !oldMyProf) {
         alert(t.alertPhoto);
         return;
     }
@@ -873,49 +896,29 @@ window.shareMyProfile = async () => {
     try {
         let imageUrl = oldMyProf ? oldMyProf.imageUrl : "";
 
-        if (file && navigator.onLine) {
-            const compressedFile = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-                        const maxWidth = 600, maxHeight = 600; // रेजोल्यूशन 300 से बढ़ाकर 600 किया गया
-
-                        if (width > height) {
-                            if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
-                        } else {
-                            if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        
-                        // फोटो को साफ़ और शार्प रखने के लिए हाई क्वालिटी स्मूथिंग इनेबल की गई है
-                        ctx.imageSmoothingEnabled = true;
-                        ctx.imageSmoothingQuality = 'high';
-                        
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        canvas.toBlob((blob) => {
-                            resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
-                        }, 'image/jpeg', 0.95); // क्वालिटी 0.85 से बढ़ाकर 0.95 (95%) की गई
-                    };
-                    img.onerror = (error) => reject(error);
-                };
-                reader.onerror = (error) => reject(error);
+        // यदि यूजर ने नई फोटो क्रॉप की है और इंटरनेट ऑनलाइन है
+        if (croppedBlobData && navigator.onLine) {
+            // क्रॉपर के ब्लॉब डेटा से सीधे फाइल ऑब्जेक्ट बनाएं
+            const fileName = file ? file.name : "profile_image.jpg";
+            const compressedFile = new File([croppedBlobData], fileName, { 
+                type: 'image/jpeg', 
+                lastModified: Date.now() 
             });
+
             const fd = new FormData();
             fd.append("file", compressedFile);
             fd.append("upload_preset", PRESET);
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: "POST", body: fd });
+            
+            // Cloudinary पर अपलोड करें
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { 
+                method: "POST", 
+                body: fd 
+            });
             const uploadData = await res.json();
             imageUrl = uploadData.secure_url;
+            
+            // अपलोड होने के बाद ग्लोबल वेरिएबल रीसेट करें
+            croppedBlobData = null;
         }
 
         const name = document.getElementById("pName").value;
@@ -943,6 +946,96 @@ window.shareMyProfile = async () => {
     }
 }
 
+// ग्लोबल वेरिएबल जिसमें क्रॉप की हुई इमेज का ब्लॉब (Blob) स्टोर होगा
+let croppedBlobData = null; 
+let cropperInstance = null;
+
+// जब यूजर फाइल इनपुट (#pImage) पर क्लिक करके फोटो चुनेगा
+document.getElementById("pImage").addEventListener("change", function(e) {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+        const file = files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(event) {
+            // क्रॉपर मोडल में इमेज सेट करें
+            const imageToCrop = document.getElementById('imageToCrop');
+            imageToCrop.src = event.target.result;
+            
+            // मोडल को दिखाएं
+            document.getElementById('cropperModal').style.display = 'block';
+            
+            // पुराना क्रॉपर इंस्टेंस डिलीट करें अगर कोई हो
+            if (cropperInstance) cropperInstance.destroy();
+            
+                        // नया Cropper.js चालू करें 
+            cropperInstance = new Cropper(imageToCrop, {
+                aspectRatio: 1, // 1:1 चौकोर फ्रेम (गोल प्रोफाइल के लिए)
+                viewMode: 1,    // इमेज फ्रेम के बाहर नहीं जाएगी
+                autoCropArea: 1,
+                
+                // 👇 यहाँ 'move' रखना है ताकि आप इमेज को पकड़कर मूव कर सकें
+                dragMode: 'move', 
+                
+                // 🛑 फ्रेम (कॉर्नर) को पूरी तरह लॉक करने के लिए सेटिंग्स:
+                cropBoxMovable: false,   // फ्रेम अपनी जगह से हिलेगा नहीं
+                cropBoxResizable: false, // फ्रेम छोटा-बड़ा नहीं होगा
+                toggleDragModeOnDblclick: false, // डबल क्लिक पर मोड नहीं बदलेगा
+                
+                ready() {
+                    // यूजर को यह समझाने के लिए कि फोटो गोल दिखेगी, क्रॉपर बॉक्स को CSS से गोल दिखाएं
+                    document.querySelector('.cropper-face').style.borderRadius = '50%';
+                    document.querySelector('.cropper-view-box').style.borderRadius = '50%';
+                    
+                    // 🌟 यह सबसे जरूरी लाइन है: यह फ्रेम के ऊपर टच/माउस इवेंट को हटा देती है 
+                    // ताकि आप सीधे उंगली इमेज पर रखकर उसे चारों तरफ (ऊपर, नीचे, दाएं, बाएं) और ज़ूम कर सकें
+                    const cropBox = document.querySelector('.cropper-crop-box');
+                    if (cropBox) {
+                        cropBox.style.pointerEvents = 'none';
+                    }
+                }
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// कैंसिल बटन दबाने पर
+document.getElementById("cropCancelBtn").addEventListener("click", function() {
+    document.getElementById('cropperModal').style.display = 'none';
+    document.getElementById("pImage").value = ""; // इनपुट रीसेट करें
+    if (cropperInstance) cropperInstance.destroy();
+    croppedBlobData = null;
+});
+
+// सेव/सेट फोटो बटन दबाने पर
+document.getElementById("cropSaveBtn").addEventListener("click", function() {
+    if (!cropperInstance) return;
+    
+    // हाई क्वालिटी रिज़ॉल्यूशन (600x600) में क्रॉप किया हुआ कैनवस लें
+    const canvas = cropperInstance.getCroppedCanvas({
+        width: 600,
+        height: 600,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high'
+    });
+    
+    // कैनवस को जेपेग ब्लॉब (Blob) में बदलें और ग्लोबल वेरिएबल में सेव करें
+    canvas.toBlob(function(blob) {
+        croppedBlobData = blob;
+        
+        // अस्थायी रूप से आपकी स्क्रीन पर दिखने वाली प्रोफाइल इमेज को अपडेट कर दें (ताकि यूजर को दिखे कि सेट हो गई)
+        const previewImg = document.querySelector('#profileModal img, .profile-modal-content img');
+        if(previewImg) {
+            previewImg.src = URL.createObjectURL(blob);
+        }
+        
+        // मोडल बंद करें
+        document.getElementById('cropperModal').style.display = 'none';
+        if (cropperInstance) cropperInstance.destroy();
+    }, 'image/jpeg', 0.95); // 95% बेस्ट क्वालिटी
+});
+        
         window.deleteProfile = async () => {
             const t = translations[lang];
             if (confirm(t.alertDelete)) {
